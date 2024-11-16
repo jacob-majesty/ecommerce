@@ -1,0 +1,4 @@
+package com.majesty.ecommerce.entity;
+
+public class ProductCategory {
+}
