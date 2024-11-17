@@ -1,0 +1,7 @@
+package com.majesty.ecommerce.dao;
+
+import com.majesty.ecommerce.entity.ProductCategory;
+import org.springframework.data.jpa.repository.JpaRepository;
+
+public interface ProductCategoryInterface extends JpaRepository<ProductCategory, Long> {
+}

@@ -1,20 +1,22 @@
 package com.majesty.ecommerce.entity;
 
-import lombok.Data;
+import jakarta.persistence.*;
+import lombok.Getter;
+import lombok.Setter;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
-
-import javax.persistence.*;
 import java.math.BigDecimal;
 import java.util.Date;
 
 
 @Entity
-@Table(name = "products")
-@Data
+@Table(name = "product")
+@Getter
+@Setter
 public class Product {
+
     @Id
-    @GeneratedValue(strategy = javax.persistence.GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     private Long id;
 
