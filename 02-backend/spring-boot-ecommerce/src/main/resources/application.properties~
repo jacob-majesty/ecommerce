@@ -12,6 +12,6 @@ spring.jpa.properties.hibernate.dialect=org.hibernate.dialect.MySQL8Dialect
 spring.data.rest.base-path=/api
 
 # Server Configuration
-server.port=8091
+server.port=8090
 server.error.include-message=always
 server.error.include-binding-errors=always
