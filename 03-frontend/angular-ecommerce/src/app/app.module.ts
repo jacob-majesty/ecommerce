@@ -8,21 +8,20 @@ import { HttpClientModule } from '@angular/common/http';
 import { Product } from './common/product';
 import { ProductService } from './services/product.service';
 
+
 @NgModule({
   declarations: [
     AppComponent,
-    ProductListComponent
+    //ProductListComponent
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
     HttpClientModule
   ],
-  providers: [
-    provideClientHydration(),
-    ProductService
-
-  ],
+  providers: [ProductService],
+    //provideClientHydration(),
   bootstrap: [AppComponent]
 })
 export class AppModule { }
+

@@ -17,6 +17,7 @@
     "importHelpers": true,
     "target": "ES2022",
     "module": "ES2022",
+    "baseUrl": "./",
     "useDefineForClassFields": false,
     "lib": [
       "ES2022",
@@ -29,4 +30,5 @@
     "strictInputAccessModifiers": true,
     "strictTemplates": true
   }
+  
 }
