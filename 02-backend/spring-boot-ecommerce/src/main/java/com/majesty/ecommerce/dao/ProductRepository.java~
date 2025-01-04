@@ -1,4 +1,0 @@
-package com.majesty.ecommerce.dao;
-
-public interface ProductRepository {
-}
