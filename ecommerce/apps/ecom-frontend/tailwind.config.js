@@ -10,8 +10,13 @@ module.exports = {
   theme: {
     fontFamily: {
       'sans': 'Inter var, ui-sans-serif, system-ui',
-      'serif': 'Inter var, ui-sans-serif, system-ui',
+      'serif': 'Inter var, ui-sans-serif, system-ui'
     },
+
+    backgroundColor: {
+      default: '#0000ff', 
+    },
+
     fontSize: {
       sm: '0.875rem',
       base: '1.3rem',
