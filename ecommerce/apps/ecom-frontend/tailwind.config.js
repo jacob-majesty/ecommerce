@@ -16,6 +16,9 @@ module.exports = {
     backgroundColor: {
       default: '#0000ff', 
     },
+    textColor: {
+      primary: '#000000', // black
+    },
 
     fontSize: {
       sm: '0.875rem',
