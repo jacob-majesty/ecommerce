@@ -1,13 +1,12 @@
+import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
-import { BrowserModule, provideClientHydration } from '@angular/platform-browser';
 
-import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { ProductListComponent } from './components/product-list/product-list.component';
-import { HttpClient, HttpClientModule } from '@angular/common/http';
-import { Product } from './common/product';
+import { HttpClientModule } from '@angular/common/http';
 import { ProductService } from './services/product.service';
-import { RouterModule, Routes } from '@angular/router';
+
+import { Routes, RouterModule} from '@angular/router';
 
 const routes: Routes = [
   {path: 'category/:id', component: ProductListComponent},
@@ -15,8 +14,8 @@ const routes: Routes = [
   {path: 'products', component: ProductListComponent},
   {path: '', redirectTo: '/products', pathMatch: 'full'},
   {path: '**', redirectTo: '/products', pathMatch: 'full'}
-
 ];
+
 @NgModule({
   declarations: [
     AppComponent,
@@ -25,13 +24,9 @@ const routes: Routes = [
   imports: [
     RouterModule.forRoot(routes),
     BrowserModule,
-    AppRoutingModule,
-    HttpClientModule,
+    HttpClientModule
   ],
-  providers: [ 
-    ProductService,
-    provideClientHydration()
-  ],
+  providers: [ProductService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
