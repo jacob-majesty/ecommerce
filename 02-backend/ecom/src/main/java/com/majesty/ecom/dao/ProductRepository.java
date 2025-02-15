@@ -12,4 +12,6 @@ import com.majesty.ecom.entity.Product;
 public interface ProductRepository extends JpaRepository<Product, Long> {
 
     Page<Product> findByCategoryId(@Param("id") long id, Pageable pageable);
+
+    Page<Product> findByNameContaining(@Param("name") String name, Pageable page);
 }
