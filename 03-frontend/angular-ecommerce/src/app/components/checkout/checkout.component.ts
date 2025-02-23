@@ -6,6 +6,11 @@ import { Country } from '../../common/country';
 import { State } from '../../common/state';
 import { Luv2ShopFormService } from '../../services/luv2-shop-form.service';
 import { Luv2ShopValidators } from '../../validators/luv2-shop-validators';
+import { CheckoutService } from '../../services/checkout.service';
+import { Order } from '../../common/order';
+import { OrderItem } from '../../common/order-item';
+import { Purchase } from '../../common/purchase';
+import { Address } from '../../common/address';
 
 @Component({
   selector: 'app-checkout',
@@ -31,8 +36,7 @@ export class CheckoutComponent {
               private luv2ShopFormService: Luv2ShopFormService,
               private cartService: CartService,
               private checkoutService: CheckoutService,
-              private router: Router) {
-               }
+              private router: Router) {}
 
   ngOnInit(): void {
     
@@ -203,7 +207,7 @@ export class CheckoutComponent {
     // populate purchase - customer
     purchase.customer = this.checkoutFormGroup.controls['customer'].value;
     
-    // populate purchase - shipping address
+ // populate purchase - shipping address
     purchase.shippingAddress = this.checkoutFormGroup.controls['shippingAddress'].value;
     const shippingState: State = JSON.parse(JSON.stringify(purchase.shippingAddress.state));
     const shippingCountry: Country = JSON.parse(JSON.stringify(purchase.shippingAddress.country));
@@ -216,6 +220,8 @@ export class CheckoutComponent {
     const billingCountry: Country = JSON.parse(JSON.stringify(purchase.billingAddress.country));
     purchase.billingAddress.state = billingState.name;
     purchase.billingAddress.country = billingCountry.name;
+  ;
+    
   
     // populate purchase - order and orderItems
     purchase.order = order;
