@@ -46,6 +46,10 @@ function sendToLoginPage(oktaAuth: OktaAuth, injector: Injector) {
 }
 
 const routes: Routes = [
+
+  {path: 'orders', component: OrderHistoryComponent, canActivate: [OktaAuthGuard],
+                          data: {onAuthRequired: sendToLoginPage}},
+
   {path: 'members', component: MembersPageComponent, canActivate: [OktaAuthGuard],
                           data: {onAuthRequired: sendToLoginPage}},
 
