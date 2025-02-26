@@ -23,7 +23,7 @@ import jakarta.persistence.metamodel.EntityType;
 @Configuration
 public class MyDataRestConfig implements RepositoryRestConfigurer {
 
-    @Value("${allowed.origins}")
+    @Value("${cors.allowedOrigins}")
     private String[] theAllowedOrigins;
 
     private EntityManager entityManager;
