@@ -10,6 +10,6 @@ import com.majesty.ecom.entity.Order;
 
 @RepositoryRestResource
 public interface OrderRepository extends JpaRepository<Order, Long> {
-    Page<Order> findByCustomerEmail(@Param("email") String email, Pageable page);
+    Page<Order> findByCustomerEmailOrderByDateCreatedDesc(@Param("email") String email, Pageable page);
 
 }
