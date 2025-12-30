@@ -37,5 +37,5 @@ jobs:
         run: |
           cd frontend
           npm install
-          # Note: For tests, add 'npm test -- --watch=false --browsers=ChromeHeadless'
+          # Note: For test, add 'npm test -- --watch=false --browsers=ChromeHeadless'
           npm run build -- --configuration=production
