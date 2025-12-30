@@ -1,0 +1,32 @@
+# --- Secrets and Config ---
+.env
+*.local
+secrets.properties
+
+# --- Java / Spring Boot (Backend) ---
+target/
+/backend/target/
+*.class
+*.jar
+*.war
+*.ear
+.mvn/wrapper/maven-wrapper.jar
+.metadata/
+.project
+.settings/
+.classpath
+
+# --- Angular (Frontend) ---
+frontend/node_modules/
+frontend/dist/
+frontend/.angular/
+.npm/
+npm-debug.log*
+
+# --- IDEs / System ---
+.idea/
+.vscode/
+*.swp
+*.DS_Store
+dist/
+tmp/
