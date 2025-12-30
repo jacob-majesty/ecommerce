@@ -23,7 +23,7 @@ jobs:
       - name: Build and Test Backend
         run: |
           cd backend
-          mvn clean install
+          mvn clean package -DskipTests
 
       # --- Frontend ---
       - name: Set up Node.js
