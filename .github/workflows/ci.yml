@@ -1,0 +1,41 @@
+name: E-commerce CI/CD Pipeline
+
+on:
+  push:
+    branches: [ "main", "dev" ]
+  pull_request:
+    branches: [ "dev" ]
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      # --- Backend ---
+      - name: Set up JDK 17
+        uses: actions/setup-java@v4
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+          cache: 'maven'
+
+      - name: Build and Test Backend
+        run: |
+          cd backend
+          mvn clean package -DskipTests
+
+      # --- Frontend ---
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+          cache: 'npm'
+          cache-dependency-path: frontend/package-lock.json
+
+      - name: Build and Test Frontend
+        run: |
+          cd frontend
+          npm install
+          # Note: For test, add 'npm test -- --watch=false --browsers=ChromeHeadless'
+          npm run build -- --configuration=production

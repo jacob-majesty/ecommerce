@@ -1,0 +1,34 @@
+services:
+  db:
+    container_name: ecommerce-db
+    image: mysql:8.0
+    restart: always
+    environment:
+      MYSQL_DATABASE: ${MYSQL_DATABASE}
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+    ports:
+      - "3307:3306"
+    healthcheck:
+      test: ["CMD", "mysqladmin" ,"ping", "-h", "localhost"]
+      timeout: 5s
+      retries: 10
+
+  backend:
+    container_name: ecommerce-backend
+    build: ./backend
+    ports:
+      - "8080:8080"
+    environment:
+      - MYSQL_DATABASE=${MYSQL_DATABASE}
+      - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}
+    depends_on:
+      db:
+        condition: service_healthy
+
+  frontend:
+    container_name: ecommerce-frontend
+    build: ./frontend
+    ports:
+      - "80:80"
+    depends_on:
+      - backend

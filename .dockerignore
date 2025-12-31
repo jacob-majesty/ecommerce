@@ -1,0 +1,33 @@
+# Git
+.git
+.gitignore
+**/Dockerfile*
+
+# Environment / Secrets
+.env
+.env.example
+*.log
+
+# IDEs and OS
+.idea/
+.vscode/
+.DS_Store
+*.swp
+
+# Backend (Java/Maven)
+backend/target/
+backend/.mvn/
+backend/mvnw
+backend/mvnw.cmd
+
+# Frontend (Angular/Node)
+frontend/node_modules/
+frontend/.angular/
+frontend/dist/
+frontend/.editorconfig
+
+# Docker & CI
+.github/
+docker-compose.yml
+docker-compose.override.yml
+README.md
