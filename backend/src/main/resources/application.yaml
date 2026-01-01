@@ -3,12 +3,32 @@ spring:
     name: backend
   datasource:
     url: jdbc:mysql://db:3306/${MYSQL_DATABASE}?allowPublicKeyRetrieval=true&useSSL=false
-    username: root
+    username: ${MYSQL_USER}
     password: ${MYSQL_ROOT_PASSWORD}
+    driver-class-name: com.mysql.cj.jdbc.Driver
+
+  data:
+    rest:
+      base-path: /api
+
+  hikari:
+    maximum-pool-size: 10
+    minimum-idle: 5
+    idle-timeout: 300000      # 5 minutes
+    max-lifetime: 1200000     # 20 minutes (Must be shorter than MySQL's wait_timeout)
+    connection-timeout: 20000 # 20 seconds
+    connection-test-query: SELECT 1
+
+  flyway:
+    enabled: true
+    locations: classpath:db/migration
+    baseline-on-migrate: true
+
   jpa:
     hibernate:
-      ddl-auto: update
+      ddl-auto: validate
     show-sql: true
     properties:
       hibernate:
         dialect: org.hibernate.dialect.MySQLDialect
+        format_sql: true
