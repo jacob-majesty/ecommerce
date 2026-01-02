@@ -1,0 +1,15 @@
+FROM node:18
+
+WORKDIR /app
+
+COPY package*.json ./
+
+RUN npm install
+
+COPY . .
+
+# Angular default dev port
+EXPOSE 4200
+
+# Note: The 'command' is handled by docker-compose.dev.yml
+# to allow for easy adjustments without rebuilding the image.
