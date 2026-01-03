@@ -1,0 +1,28 @@
+<div class="main-content">
+  <div class="section-content section-content-p30">
+    <div class="container-fluid">
+      <div class="row">
+
+        @for (tempProduct of products; track tempProduct.sku) {
+          <div class="col-md-3">
+            <div class="product-box">
+              <img [src]="tempProduct.imageUrl" class="img-responsive" [alt]="tempProduct.name">
+
+              <h1>{{ tempProduct.name }}</h1>
+              <div class="price">{{ tempProduct.unitPrice | currency:'USD' }}</div>
+
+              <a href="#" class="primary-btn">
+                <i class="fas fa-cart-plus"></i> Add to cart
+              </a>
+            </div>
+          </div>
+        } @empty {
+          <div class="alert alert-warning col-12" role="alert">
+            No products found in the catalog.
+          </div>
+        }
+
+      </div>
+    </div>
+  </div>
+</div>

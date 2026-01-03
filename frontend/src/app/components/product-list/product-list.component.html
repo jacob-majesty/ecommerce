@@ -1,0 +1,5 @@
+@for (tempProduct of products; track tempProduct.sku) {
+  <div>{{ tempProduct.name }}: {{ tempProduct.unitPrice | currency:'USD' }}</div>
+} @empty {
+  <p>No products found.</p>
+}

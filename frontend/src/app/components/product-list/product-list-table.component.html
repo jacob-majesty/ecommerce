@@ -1,0 +1,26 @@
+<table class="table">
+  <thead class="table-dark">
+  <tr>
+    <th></th>
+    <th>Name</th>
+    <th>Price</th>
+    <th>Units in Stock</th>
+  </tr>
+  </thead>
+  <tbody>
+    @for (tempProduct of products; track tempProduct.sku) {
+      <tr>
+        <td class="align-middle">
+          <img [src]="tempProduct.imageUrl" height="50" [alt]="tempProduct.name" />
+        </td>
+        <td class="align-middle">{{ tempProduct.name }}</td>
+        <td class="align-middle">{{ tempProduct.unitPrice | currency:'USD' }}</td>
+        <td class="align-middle">{{ tempProduct.unitsInStock }}</td>
+      </tr>
+    } @empty {
+      <tr>
+        <td colspan="4" class="text-center alert alert-warning">No products available.</td>
+      </tr>
+    }
+  </tbody>
+</table>
