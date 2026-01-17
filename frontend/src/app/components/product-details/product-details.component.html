@@ -1,0 +1,29 @@
+<div class="detail-section">
+  <div class="container-fluid">
+
+    @if (product(); as productData) {
+
+      <img [src]="productData.imageUrl" class="detail-img" [alt]="productData.name">
+
+      <h3>{{ productData.name }}</h3>
+      <div class="price">{{ productData.unitPrice | currency:'USD' }}</div>
+
+      <button class="primary-btn">Add to cart</button>
+
+      <hr>
+      <h4>Description</h4>
+      <p>{{ productData.description }}</p>
+
+    } @else if (errorMessage()) {
+      <div class="alert alert-danger">
+        {{ errorMessage() }}
+      </div>
+    } @else {
+      <div class="alert alert-info">
+        Loading product details...
+      </div>
+    }
+
+    <a routerLink="/products" class="mt-5 d-block">Back to Product List</a>
+  </div>
+</div>

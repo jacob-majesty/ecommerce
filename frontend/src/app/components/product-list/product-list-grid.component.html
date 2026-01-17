@@ -6,11 +6,13 @@
         @for (tempProduct of products; track tempProduct.sku) {
           <div class="col-md-3">
             <div class="product-box">
-              <img [src]="tempProduct.imageUrl" class="img-responsive" [alt]="tempProduct.name">
-
-              <h1>{{ tempProduct.name }}</h1>
+              <a [routerLink]="['/products', tempProduct.id]">
+                <img [src]="tempProduct.imageUrl" class="img-responsive" [alt]="tempProduct.name">
+              </a>
+              <a [routerLink]="['/products', tempProduct.id]">
+                <h1>{{ tempProduct.name }}</h1>
+              </a>
               <div class="price">{{ tempProduct.unitPrice | currency:'USD' }}</div>
-
               <a href="#" class="primary-btn">
                 <i class="fas fa-cart-plus"></i> Add to cart
               </a>
