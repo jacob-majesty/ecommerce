@@ -5,6 +5,8 @@ import {Product} from "../../common/product";
 import {ActivatedRoute, RouterLink} from "@angular/router";
 import {catchError, EMPTY} from "rxjs";
 import { NgbPaginationModule } from "@ng-bootstrap/ng-bootstrap";
+import {CartItem} from "../../common/cart-item";
+import {CartService} from "../../services/cart.service";
 
 @Component({
   selector: 'app-product-list',
@@ -27,6 +29,7 @@ export class ProductListComponent implements OnInit {
 
   private productService = inject(ProductService);
   private route = inject(ActivatedRoute);
+  private cartService = inject(CartService);
 
   ngOnInit() {
     this.route.paramMap.subscribe(() => {
@@ -93,6 +96,14 @@ export class ProductListComponent implements OnInit {
     this.pageNumber.set(data.page.number + 1);
     this.pageSize.set(data.page.size);
     this.totalElements.set(data.page.totalElements);
+  }
+
+  addToCart(theProduct: Product) {
+    console.log(`Adding to cart: ${theProduct.name}, ${theProduct.unitPrice}`);
+
+    const theCartItem = new CartItem(theProduct);
+
+    this.cartService.addToCart(theCartItem);
   }
 
   private handleLocalError(error: any) {

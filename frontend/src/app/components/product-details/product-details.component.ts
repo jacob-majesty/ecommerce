@@ -5,6 +5,8 @@ import { ProductService } from "../../services/product.service";
 import { Product } from '../../common/product';
 import { catchError, EMPTY } from 'rxjs';
 import {CurrencyPipe} from "@angular/common";
+import {CartService} from "../../services/cart.service";
+import {CartItem} from "../../common/cart-item";
 
 @Component({
   selector: 'app-product-details',
@@ -22,6 +24,7 @@ export class ProductDetailsComponent implements OnInit {
   errorMessage = signal<string | null>(null);
 
   private productService = inject(ProductService);
+  private cartService= inject(CartService);
   private route = inject(ActivatedRoute);
   private router = inject(Router);
 
@@ -35,6 +38,16 @@ export class ProductDetailsComponent implements OnInit {
         this.router.navigate(['/products']);
       }
     });
+  }
+
+  addToCart() {
+    if (this.product()) {
+      console.log(`Adding to cart: ${this.product()?.name}, ${this.product()?.unitPrice}`);
+
+      const theCartItem = new CartItem(this.product()!);
+
+      this.cartService.addToCart(theCartItem);
+    }
   }
 
   private handleProductDetails(theProductId: number): void {
