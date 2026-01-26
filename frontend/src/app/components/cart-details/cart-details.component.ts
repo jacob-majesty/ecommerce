@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import {CartItem} from "../../common/cart-item";
 import {CartService} from "../../services/cart.service";
 import {CurrencyPipe} from "@angular/common";
+import {RouterLink} from "@angular/router";
 
 
 @Component({
@@ -9,7 +10,8 @@ import {CurrencyPipe} from "@angular/common";
   templateUrl: './cart-details.component.html',
   standalone: true,
   imports: [
-    CurrencyPipe
+    CurrencyPipe,
+    RouterLink
   ],
   styleUrls: ['./cart-details.component.css']
 })
