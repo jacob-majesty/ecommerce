@@ -12,6 +12,17 @@
             <div class="col-md-9">
               <div class="input-space">
                 <input formControlName="firstName" type="text">
+
+                @if (firstName?.invalid && (firstName?.dirty || firstName?.touched)) {
+                  <div class="alert alert-danger mt-1">
+                    @if (firstName?.errors?.['required']) {
+                      <div>First Name is required</div>
+                    }
+                    @if (firstName?.errors?.['minlength']) {
+                      <div>First Name must be at least 2 characters long</div>
+                    }
+                  </div>
+                }
               </div>
             </div>
           </div>
@@ -21,6 +32,17 @@
             <div class="col-md-9">
               <div class="input-space">
                 <input formControlName="lastName" type="text">
+
+                @if (lastName?.invalid && (lastName?.dirty || lastName?.touched)) {
+                  <div class="alert alert-danger mt-1">
+                    @if (lastName?.errors?.['required']) {
+                      <div>Last Name is required</div>
+                    }
+                    @if (lastName?.errors?.['minlength']) {
+                      <div>Last Name must be at least 2 characters long</div>
+                    }
+                  </div>
+                }
               </div>
             </div>
           </div>
@@ -30,6 +52,17 @@
             <div class="col-md-9">
               <div class="input-space">
                 <input formControlName="email" type="text">
+
+                @if (email?.invalid && (email?.dirty || email?.touched)) {
+                  <div class="alert alert-danger mt-1">
+                    @if (email?.errors?.['required']) {
+                      <div>Email is required</div>
+                    }
+                    @if (email?.errors?.['pattern']) {
+                      <div>Email must be a valid email address format</div>
+                    }
+                  </div>
+                }
               </div>
             </div>
           </div>

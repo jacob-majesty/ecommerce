@@ -1,7 +1,7 @@
 import {Component, OnInit} from '@angular/core';
-import {FormBuilder, FormGroup, ReactiveFormsModule} from "@angular/forms";
+import {FormBuilder, FormControl, FormGroup, ReactiveFormsModule, Validators} from "@angular/forms";
 import {CartService} from "../../services/cart.service";
-import {CurrencyPipe, NgForOf} from "@angular/common";
+import {CurrencyPipe, NgForOf, NgIf} from "@angular/common";
 import {ShopFormService} from "../../services/shop-form.service";
 import {Country} from "../../common/country";
 import {State} from "../../common/state";
@@ -12,7 +12,8 @@ import {State} from "../../common/state";
   imports: [
     ReactiveFormsModule,
     CurrencyPipe,
-    NgForOf
+    NgForOf,
+    NgIf
   ],
   templateUrl: './checkout.component.html',
   styleUrl: './checkout.component.css'
@@ -33,15 +34,27 @@ export class CheckoutComponent implements OnInit {
               private shopFormService: ShopFormService,
               private cartService: CartService) { }
 
-  ngOnInit(): void {
+  get firstName() {
+    return this.checkoutFormGroup.get('customer.firstName');
+  }
 
+  get lastName() {
+    return this.checkoutFormGroup.get('customer.lastName');
+  }
+
+  get email() {
+    return this.checkoutFormGroup.get('customer.email');
+  }
+
+  ngOnInit(): void {
     this.reviewCartStatus();
 
     this.checkoutFormGroup = this.formBuilder.group({
       customer: this.formBuilder.group({
-        firstName: [''],
-        lastName: [''],
-        email: ['']
+        firstName: new FormControl('', [Validators.required, Validators.minLength(2)]),
+        lastName:  new FormControl('', [Validators.required, Validators.minLength(2)]),
+        email: new FormControl('',
+          [Validators.required, Validators.pattern('^[a-z0-9._%+-]+@[a-z0-9.-]+\\.[a-z]{2,4}$')])
       }),
       shippingAddress: this.formBuilder.group({
         street: [''],
@@ -126,20 +139,19 @@ export class CheckoutComponent implements OnInit {
 
   onSubmit() {
     console.log("Handling the submit button");
-    const customerFormGroup = this.checkoutFormGroup.get('customer');
 
-    if (customerFormGroup) {
-      console.log(customerFormGroup.value);
-      console.log("The email address is " + customerFormGroup.value.email);
-    } else {
-      console.error("Customer form group is not defined");
+    if (this.checkoutFormGroup.invalid) {
+      this.checkoutFormGroup.markAllAsTouched();
     }
+
+    console.log("Shipping country: " + (this.checkoutFormGroup.get('shippingAddress')?.value?.country?.name ?? 'Not selected'));
+    console.log("Shipping state: " + (this.checkoutFormGroup.get('shippingAddress')?.value?.state?.name ?? 'Not selected'));
   }
 
   getStates(formGroupName: string) {
     const formGroup = this.checkoutFormGroup.get(formGroupName);
 
-    if (!formGroup || !formGroup.value.country) {
+    if (!formGroup || !formGroup.value || !formGroup.value.country) {
       console.warn(`Form group '${formGroupName}' or country data is not available`);
       return;
     }
