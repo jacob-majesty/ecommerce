@@ -3,6 +3,8 @@ import {FormBuilder, FormGroup, ReactiveFormsModule} from "@angular/forms";
 import {CartService} from "../../services/cart.service";
 import {CurrencyPipe, NgForOf} from "@angular/common";
 import {ShopFormService} from "../../services/shop-form.service";
+import {Country} from "../../common/country";
+import {State} from "../../common/state";
 
 @Component({
   selector: 'app-checkout',
@@ -23,6 +25,9 @@ export class CheckoutComponent implements OnInit {
   totalQuantity: number = 0;
   creditCardMonths: number[] = [];
   creditCardYears: number[] = [];
+  countries: Country[] = [];
+  shippingAddressStates: State[] = [];
+  billingAddressStates: State[] = [];
 
   constructor(private formBuilder: FormBuilder,
               private shopFormService: ShopFormService,
@@ -72,6 +77,11 @@ export class CheckoutComponent implements OnInit {
     this.shopFormService.getCreditCardYears().subscribe(
       data => this.creditCardYears = data
     );
+
+    // Populate countries
+    this.shopFormService.getCountries().subscribe(
+      data => this.countries = data
+    );
   }
 
   reviewCartStatus() {
@@ -86,12 +96,12 @@ export class CheckoutComponent implements OnInit {
 
   handleMonthsAndYears() {
     const creditCardFormGroup = this.checkoutFormGroup.get('creditCard');
-    
+
     if (!creditCardFormGroup) {
       console.warn('Credit card form group is not available');
       return;
     }
-    
+
     const currentYear: number = new Date().getFullYear();
     const selectedYear: number = Number(creditCardFormGroup.value?.expirationYear || currentYear);
 
@@ -106,8 +116,11 @@ export class CheckoutComponent implements OnInit {
     if (event.target.checked) {
       this.checkoutFormGroup.controls['billingAddress']
         .setValue(this.checkoutFormGroup.controls['shippingAddress'].value);
+      this.billingAddressStates = this.shippingAddressStates;
+
     } else {
       this.checkoutFormGroup.controls['billingAddress'].reset();
+      this.billingAddressStates = [];
     }
   }
 
@@ -121,5 +134,40 @@ export class CheckoutComponent implements OnInit {
     } else {
       console.error("Customer form group is not defined");
     }
+  }
+
+  getStates(formGroupName: string) {
+    const formGroup = this.checkoutFormGroup.get(formGroupName);
+
+    if (!formGroup || !formGroup.value.country) {
+      console.warn(`Form group '${formGroupName}' or country data is not available`);
+      return;
+    }
+
+    const countryCode = formGroup.value.country.code;
+    if (!countryCode) {
+      console.warn('No country code available');
+      return;
+    }
+
+    this.shopFormService.getStates(countryCode).subscribe({
+      next: (data) => {
+        if (!formGroup) return;
+
+        if (formGroupName === 'shippingAddress') {
+          this.shippingAddressStates = data;
+        } else {
+          this.billingAddressStates = data;
+        }
+
+        const stateControl = formGroup.get('state');
+        if (stateControl && data.length > 0) {
+          stateControl.setValue(data[0]);
+        }
+      },
+      error: (err) => {
+        console.error('Error fetching states:', err);
+      }
+    });
   }
 }
