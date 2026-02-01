@@ -15,7 +15,7 @@
 
                 @if (firstName?.invalid && (firstName?.dirty || firstName?.touched)) {
                   <div class="alert alert-danger mt-1">
-                    @if (firstName?.errors?.['required']) {
+                    @if (firstName?.errors?.['required'] || firstName?.errors?.['notOnlyWhitespace']) {
                       <div>First Name is required</div>
                     }
                     @if (firstName?.errors?.['minlength']) {
@@ -35,7 +35,7 @@
 
                 @if (lastName?.invalid && (lastName?.dirty || lastName?.touched)) {
                   <div class="alert alert-danger mt-1">
-                    @if (lastName?.errors?.['required']) {
+                    @if (lastName?.errors?.['required'] || lastName?.errors?.['notOnlyWhitespace']) {
                       <div>Last Name is required</div>
                     }
                     @if (lastName?.errors?.['minlength']) {
@@ -77,9 +77,11 @@
             <div class="col-md-9">
               <div class="input-space">
                 <select formControlName="country" (change)="getStates('shippingAddress')">
-                  <option *ngFor="let country of countries" [ngValue]="country">
-                    {{ country.name }}
-                  </option>
+                  @for (country of countries; track country.id) {
+                    <option [ngValue]="country">
+                      {{ country.name }}
+                    </option>
+                  }
                 </select>
               </div>
             </div>
@@ -108,9 +110,11 @@
             <div class="col-md-9">
               <div class="input-space">
                 <select formControlName="state">
-                  <option *ngFor="let state of shippingAddressStates" [ngValue]="state">
-                    {{ state.name }}
-                  </option>
+                  @for (state of shippingAddressStates; track state.id) {
+                    <option [ngValue]="state">
+                      {{ state.name }}
+                    </option>
+                  }
                 </select>
               </div>
             </div>
@@ -143,9 +147,11 @@
             <div class="col-md-9">
               <div class="input-space">
                 <select formControlName="country" (change)="getStates('billingAddress')">
-                  <option *ngFor="let country of countries" [ngValue]="country">
-                    {{ country.name }}
-                  </option>
+                  @for (country of countries; track country.id) {
+                    <option [ngValue]="country">
+                      {{ country.name }}
+                    </option>
+                  }
                 </select>
               </div>
             </div>
@@ -174,9 +180,11 @@
             <div class="col-md-9">
               <div class="input-space">
                 <select formControlName="state">
-                  <option *ngFor="let state of billingAddressStates" [ngValue]="state">
-                    {{ state.name }}
-                  </option>
+                  @for (state of billingAddressStates; track state.id) {
+                    <option [ngValue]="state">
+                      {{ state.name }}
+                    </option>
+                  }
                 </select>
               </div>
             </div>
@@ -240,9 +248,11 @@
             <div class="col-md-9">
               <div class="input-space">
                 <select formControlName="expirationMonth">
-                  <option *ngFor="let month of creditCardMonths">
-                    {{ month }}
-                  </option>
+                  @for (month of creditCardMonths; track month) {
+                    <option [ngValue]="month">
+                      {{ month }}
+                    </option>
+                  }
                 </select>
               </div>
             </div>
@@ -253,9 +263,11 @@
             <div class="col-md-9">
               <div class="input-space">
                 <select formControlName="expirationYear" (change)="handleMonthsAndYears()">
-                  <option *ngFor="let year of creditCardYears">
-                    {{ year }}
-                  </option>
+                  @for (year of creditCardYears; track year) {
+                    <option [ngValue]="year">
+                      {{ year }}
+                    </option>
+                  }
                 </select>
               </div>
             </div>
