@@ -1,12 +1,14 @@
 
----
-
 # 🛍️ Full Stack E-Commerce Platform
+---
+<div align="center">
+  <img src="./logo.png" alt="E-Commerce App Logo" width="180" height="180"/>
+</div>
+
+---
 A production-oriented **Full Stack E-Commerce application** built with **Angular** and **Java Spring Boot**, designed to demonstrate modern software engineering practices, clean architecture, and real-world concerns such as security, payments, CI/CD, and cloud deployment.
 
 **[Architecture Decision Records (ADR)](https://github.com)** • **[Live Demo](https://github.com)** • **[API Docs](https://github.com)**
-
----
 
 ### 📖 The Architectural Narrative
 
