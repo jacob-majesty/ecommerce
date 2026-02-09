@@ -1,5 +1,5 @@
 CREATE TABLE `country` (
-                           `id` smallint unsigned NOT NULL,
+                           `id` INT NOT NULL AUTO_INCREMENT,
                            `code` varchar(2) DEFAULT NULL,
                            `name` varchar(255) DEFAULT NULL,
                            PRIMARY KEY (`id`)
@@ -12,9 +12,9 @@ INSERT INTO `country` VALUES (1,'BR','Brazil'),
                              (5,'TR','Turkey'),
                              (6,'US','United States');
 CREATE TABLE `state` (
-                         `id` smallint unsigned NOT NULL AUTO_INCREMENT,
+                         `id` INT NOT NULL AUTO_INCREMENT,
                          `name` varchar(255) DEFAULT NULL,
-                         `country_id` smallint unsigned NOT NULL,
+                         `country_id` INT NOT NULL,
                          PRIMARY KEY (`id`),
                          CONSTRAINT `fk_country` FOREIGN KEY (`country_id`) REFERENCES `country` (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=1;
