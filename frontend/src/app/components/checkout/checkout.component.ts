@@ -190,7 +190,7 @@ export class CheckoutComponent implements OnInit {
 
     const cartItems = this.cartService.cartItems;
 
-    let orderItems: OrderItem[] = cartItems.map(item => 
+    let orderItems: OrderItem[] = cartItems.map(item =>
       new OrderItem(
         item.imageUrl,
         item.unitPrice,
@@ -204,16 +204,36 @@ export class CheckoutComponent implements OnInit {
     purchase.customer = this.checkoutFormGroup.controls['customer'].value;
 
     purchase.shippingAddress = this.checkoutFormGroup.controls['shippingAddress'].value;
-    const shippingState: State = JSON.parse(JSON.stringify(purchase.shippingAddress.state));
-    const shippingCountry: Country = JSON.parse(JSON.stringify(purchase.shippingAddress.country));
-    purchase.shippingAddress.state = shippingState.name;
-    purchase.shippingAddress.country = shippingCountry.name;
+
+    if (purchase.shippingAddress.state) {
+      const shippingState: State = JSON.parse(JSON.stringify(purchase.shippingAddress.state));
+      purchase.shippingAddress.state = shippingState.name;
+    } else {
+      purchase.shippingAddress.state = '';
+    }
+
+    if (purchase.shippingAddress.country) {
+      const shippingCountry: Country = JSON.parse(JSON.stringify(purchase.shippingAddress.country));
+      purchase.shippingAddress.country = shippingCountry.name;
+    } else {
+      purchase.shippingAddress.country = '';
+    }
 
     purchase.billingAddress = this.checkoutFormGroup.controls['billingAddress'].value;
-    const billingState: State = JSON.parse(JSON.stringify(purchase.billingAddress.state));
-    const billingCountry: Country = JSON.parse(JSON.stringify(purchase.billingAddress.country));
-    purchase.billingAddress.state = billingState.name;
-    purchase.billingAddress.country = billingCountry.name;
+
+    if (purchase.billingAddress.state) {
+      const billingState: State = JSON.parse(JSON.stringify(purchase.billingAddress.state));
+      purchase.billingAddress.state = billingState.name;
+    } else {
+      purchase.billingAddress.state = '';
+    }
+
+    if (purchase.billingAddress.country) {
+      const billingCountry: Country = JSON.parse(JSON.stringify(purchase.billingAddress.country));
+      purchase.billingAddress.country = billingCountry.name;
+    } else {
+      purchase.billingAddress.country = '';
+    }
 
     purchase.order = order;
     purchase.orderItems = orderItems;
