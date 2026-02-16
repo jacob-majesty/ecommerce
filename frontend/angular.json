@@ -52,11 +52,7 @@
                 }
               ],
               "outputHashing": "all",
-              "vendorChunk": false,
-              "extractLicenses": true,
               "sourceMap": false,
-              "namedChunks": false,
-              "aot": true,
               "optimization": true
             },
             "development": {
