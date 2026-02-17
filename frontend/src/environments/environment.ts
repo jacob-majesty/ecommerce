@@ -1,18 +1,25 @@
-// This file can be replaced during build by using the `fileReplacements` array.
-// When building for production, this file is replaced with `environment.prod.ts`.
-
 export const environment = {
   production: false,
   auth0: {
-    domain: 'dev-xxxxxx.auth0.com',  // Replace with your development Auth0 domain
-    clientId: 'xxxxxxxxxxxxxxxxxxxx', // Replace with your development client ID
-    redirectUri: 'http://localhost:4200/login/callback',
-    audience: 'http://localhost:8080',
+    domain: 'AUTH0_DOMAIN_PLACEHOLDER',
+    clientId: 'AUTH0_CLIENT_ID_PLACEHOLDER',
+    authorizationParams: {
+      redirect_uri: 'AUTH0_REDIRECT_URI_PLACEHOLDER',
+      audience: 'AUTH0_AUDIENCE_PLACEHOLDER',
+    },
+    httpInterceptor: {
+      allowedList: [
+        {
+          uri: 'http://localhost:8080/*',
+          httpMethod: 'GET',
+          tokenOptions: {
+            authorizationParams: {
+              audience: 'AUTH0_AUDIENCE_PLACEHOLDER',
+              scope: 'openid profile email'
+            }
+          }
+        }
+      ]
+    }
   }
 };
-
-/*
- * For easier debugging in development mode, you can import the following file
- * to ignore zone related error stack frames such as `zone.run`, `zoneDelegate.invokeTask`.
- */
-// import 'zone.js/plugins/zone-error';  // Included with Angular CLI.
