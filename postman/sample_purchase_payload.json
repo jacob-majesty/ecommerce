@@ -1,0 +1,35 @@
+{
+  "customer": {
+    "id": 1,
+    "firstName": "John",
+    "lastName": "Doe",
+    "email": "john.doe@example.com"
+  },
+  "shippingAddress": {
+    "street": "123 Main St",
+    "city": "New York",
+    "state": "NY",
+    "country": "United States",
+    "zipCode": "10001"
+  },
+  "billingAddress": {
+    "street": "123 Main St",
+    "city": "New York",
+    "state": "NY",
+    "country": "United States",
+    "zipCode": "10001"
+  },
+  "order": {
+    "totalPrice": 199.99,
+    "totalQuantity": 2
+  },
+  "orderItems": [
+    {
+      "imageUrl": "assets/images/products/placeholder.png",
+      "unitPrice": 99.99,
+      "quantity": 2,
+      "productId": 1,
+      "name": "Sample Product"
+    }
+  ]
+}

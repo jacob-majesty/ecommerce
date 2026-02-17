@@ -2,14 +2,22 @@ FROM node:18
 
 WORKDIR /app
 
-COPY package*.json ./
+# Declare arguments
+ARG AUTH0_DOMAIN
+ARG AUTH0_CLIENT_ID
+ARG AUTH0_REDIRECT_URI
+ARG AUTH0_AUDIENCE
 
+COPY package*.json ./
 RUN npm install
+RUN npm install --save-dev @types/node
 
 COPY . .
 
-# Angular default dev port
-EXPOSE 4200
+EXPOSE 80
 
-# Note: The 'command' is handled by docker-compose.dev.yml
-# to allow for easy adjustments without rebuilding the image.
+CMD sed -i "s|AUTH0_DOMAIN_PLACEHOLDER|$AUTH0_DOMAIN|g" src/environments/environment.ts && \
+    sed -i "s|AUTH0_CLIENT_ID_PLACEHOLDER|$AUTH0_CLIENT_ID|g" src/environments/environment.ts && \
+    sed -i "s|AUTH0_REDIRECT_URI_PLACEHOLDER|$AUTH0_REDIRECT_URI|g" src/environments/environment.ts && \
+    sed -i "s|AUTH0_AUDIENCE_PLACEHOLDER|$AUTH0_AUDIENCE|g" src/environments/environment.ts && \
+    npm run start -- --host 0.0.0.0 --port 80 --poll 2000 --proxy-config proxy.conf.json

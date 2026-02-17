@@ -3,6 +3,7 @@ import {ProductListComponent} from "./components/product-list/product-list.compo
 import {ProductDetailsComponent} from "./components/product-details/product-details.component";
 import {CartDetailsComponent} from "./components/cart-details/cart-details.component";
 import {CheckoutComponent} from "./components/checkout/checkout.component";
+import { LoginStatusComponent } from './components/login-status/login-status.component';
 
 export const routes: Routes = [
   {path: 'checkout', component: CheckoutComponent},
@@ -13,5 +14,7 @@ export const routes: Routes = [
   { path: 'category', component: ProductListComponent },
   { path: 'products', component: ProductListComponent },
   { path: '', redirectTo: '/products', pathMatch: 'full' },
+  { path: 'login', component: LoginStatusComponent },
+  { path: 'login/callback', component: LoginStatusComponent },
   { path: '**', redirectTo: '/products', pathMatch: 'full' }
 ];
