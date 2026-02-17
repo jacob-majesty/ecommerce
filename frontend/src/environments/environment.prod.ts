@@ -11,9 +11,12 @@ export const environment = {
       allowedList: [
         {
           uri: 'http://localhost:80/*',
+          httpMethod: 'GET',
           tokenOptions: {
-            audience: 'AUTH0_AUDIENCE_PLACEHOLDER',
-            scope: 'openid profile email'
+            authorizationParams: {
+              audience: 'AUTH0_AUDIENCE_PLACEHOLDER',
+              scope: 'openid profile email'
+            }
           }
         }
       ]
