@@ -9,7 +9,6 @@ import { NgbPaginationModule } from "@ng-bootstrap/ng-bootstrap";
 import myAppConfig from '../config/my-app-config';
 import { AuthInterceptorService } from './services/auth-interceptor.service';
 
-// @ts-ignore
 export const appConfig: ApplicationConfig = {
   providers: [
     provideRouter(routes),
