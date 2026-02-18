@@ -8,7 +8,6 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 
 import java.util.List;
 
-@CrossOrigin("http://localhost:80")
 @RepositoryRestResource
 public interface StateRepository extends JpaRepository<State, Integer> {
 

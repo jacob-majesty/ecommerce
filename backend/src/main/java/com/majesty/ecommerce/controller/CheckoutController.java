@@ -5,10 +5,7 @@ import com.majesty.ecommerce.dto.PurchaseResponse;
 import com.majesty.ecommerce.service.CheckoutService;
 import org.springframework.web.bind.annotation.*;
 
-@CrossOrigin(origins = {"http://localhost", "http://localhost:80"}, 
-           allowedHeaders = "*",
-           methods = {RequestMethod.GET, RequestMethod.POST, RequestMethod.OPTIONS},
-           allowCredentials = "true")
+@CrossOrigin(origins = "${allowed.origins}")
 @RestController
 @RequestMapping("/api/checkout")
 public class CheckoutController {
