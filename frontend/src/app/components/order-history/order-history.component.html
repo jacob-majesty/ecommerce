@@ -1,0 +1,45 @@
+<div class="main-content">
+  <div class="section-content section-content-p30">
+    <div class="container-fluid">
+      <h3 class="mb-4">Your Order History</h3>
+
+      @if (orderHistoryList.length > 0) {
+        <div class="table-responsive">
+          <table class="table table-hover table-bordered">
+            <thead class="thead-light">
+            <tr>
+              <th width="40%">Order Tracking Number</th>
+              <th width="20%">Total Price</th>
+              <th width="20%">Total Quantity</th>
+              <th width="20%">Date</th>
+            </tr>
+            </thead>
+            <tbody>
+              @for (tempOrderHistory of orderHistoryList; track tempOrderHistory.orderTrackingNumber) {
+                <tr>
+                  <td class="text-break">
+                    {{ tempOrderHistory.orderTrackingNumber }}
+                  </td>
+                  <td>
+                    {{ tempOrderHistory.totalPrice | currency: 'USD' }}
+                  </td>
+                  <td>
+                    {{ tempOrderHistory.totalQuantity }}
+                  </td>
+                  <td>
+                    {{ tempOrderHistory.dateCreated | date: 'medium' }}
+                  </td>
+                </tr>
+              }
+            </tbody>
+          </table>
+        </div>
+      } @else {
+        <div class="alert alert-warning col-md-12" role="alert">
+          No orders found. <a routerLink="/products" class="alert-link">Start shopping!</a>
+        </div>
+      }
+
+    </div>
+  </div>
+</div>
