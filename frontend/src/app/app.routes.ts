@@ -6,9 +6,11 @@ import {CartDetailsComponent} from "./components/cart-details/cart-details.compo
 import {CheckoutComponent} from "./components/checkout/checkout.component";
 import { LoginStatusComponent } from './components/login-status/login-status.component';
 import {MembersPageComponent} from "./components/members-page/members-page.component";
+import {OrderHistoryComponent} from "./components/order-history/order-history.component";
 
 export const routes: Routes = [
   {path: 'members', component: MembersPageComponent, canActivate: [AuthGuard]},
+  {path: 'order-history', component: OrderHistoryComponent, canActivate: [AuthGuard]},
   {path: 'checkout', component: CheckoutComponent},
   {path: 'cart-details', component: CartDetailsComponent},
   {path: 'products/:id', component: ProductDetailsComponent},
