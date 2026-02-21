@@ -13,23 +13,23 @@ import { from, lastValueFrom, Observable } from 'rxjs';
 })
 export class AuthInterceptorService implements HttpInterceptor {
 
-  constructor(@Inject(AuthService) private auth: AuthService) {}
+  constructor(private auth: AuthService) { }
 
   intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
     return from(this.handleAccess(request, next));
   }
 
   private async handleAccess(request: HttpRequest<any>, next: HttpHandler): Promise<HttpEvent<any>> {
-    const securedEndpoints = ['http://localhost:8080/api/orders'];
 
-    if (securedEndpoints.some((url) => request.urlWithParams.includes(url))) {
-      const token = await this.auth.getAccessTokenSilently();
-      console.log('Access Token: ', token);
+    const securedEndpoints = ['http://localhost:80/api/orders'];
+
+    if (securedEndpoints.some(url => request.urlWithParams.includes(url))) {
+      const accessToken = await lastValueFrom(this.auth.getAccessTokenSilently());
 
       request = request.clone({
         setHeaders: {
-          Authorization: `Bearer ${token}`,
-        },
+          Authorization: 'Bearer ' + accessToken
+        }
       });
     }
 
