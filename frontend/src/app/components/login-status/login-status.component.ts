@@ -17,6 +17,7 @@ export class LoginStatusComponent {
   isAuthenticated: boolean = false;
   profileJson: string | undefined;
   userEmail: string | undefined;
+  private userFullName: string = '';
   storage: Storage = sessionStorage;
 
   constructor(private auth: AuthService, @Inject(DOCUMENT) private doc: Document) {}
@@ -32,6 +33,22 @@ export class LoginStatusComponent {
       this.storage.setItem('userEmail', JSON.stringify(this.userEmail));
       console.log('User ID: ', this.userEmail);
     });
+  }
+
+  getUserDetails() {
+    if (this.isAuthenticated) {
+      this.auth.user$.subscribe(
+        (res) => {
+          this.userFullName = res?.name as string;
+
+          const theEmail = res?.email;
+
+          if (theEmail) {
+            this.storage.setItem('userEmail', JSON.stringify(theEmail));
+          }
+        }
+      );
+    }
   }
 
   login() {

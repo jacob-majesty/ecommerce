@@ -20,7 +20,6 @@ export const appConfig: ApplicationConfig = {
       NgbPaginationModule,
       AuthModule.forRoot({
         ...myAppConfig.auth,
-        httpInterceptor: myAppConfig.httpInterceptor,
       })
     ),
     {
