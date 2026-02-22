@@ -1,5 +1,6 @@
 export const environment = {
   production: true,
+  shopApiUrl: 'https://api.yourdomain.com/api',
   auth0: {
     domain: 'AUTH0_DOMAIN_PLACEHOLDER',
     clientId: 'AUTH0_CLIENT_ID_PLACEHOLDER',
@@ -21,5 +22,8 @@ export const environment = {
         }
       ]
     }
+  },
+  stripe: {
+    publishableKey: 'STRIPE_PUBLISHABLE_KEY_PLACEHOLDER'
   }
 };
