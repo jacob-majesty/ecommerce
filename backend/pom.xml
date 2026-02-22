@@ -54,6 +54,13 @@
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-oauth2-resource-server</artifactId>
 		</dependency>
+		<dependency>
+			<groupId>com.stripe</groupId>
+			<artifactId>stripe-java</artifactId>
+			<version>31.3.0</version>
+			<scope>compile</scope>
+		</dependency>
+
 
 		<dependency>
 			<groupId>com.mysql</groupId>

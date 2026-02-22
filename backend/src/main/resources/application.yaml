@@ -43,3 +43,7 @@ spring:
         jwt:
           issuer-uri: https://${AUTH0_DOMAIN}/
           jwk-set-uri: https://${AUTH0_DOMAIN}/.well-known/jwks.json
+
+  stripe:
+    secret:
+      key: ${STRIPE_SECRET_KEY}
