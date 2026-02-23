@@ -1,5 +1,8 @@
 allowed:
-  origins: http://localhost:80
+  origins: ${FRONTEND_URL:http://localhost:80}
+
+server:
+  port: 8080
 
 spring:
   application:
@@ -18,9 +21,9 @@ spring:
   hikari:
     maximum-pool-size: 10
     minimum-idle: 5
-    idle-timeout: 300000      # 5 minutes
-    max-lifetime: 1200000     # 20 minutes (Must be shorter than MySQL's wait_timeout)
-    connection-timeout: 20000 # 20 seconds
+    idle-timeout: 300000
+    max-lifetime: 1200000
+    connection-timeout: 20000
     connection-test-query: SELECT 1
 
   flyway:

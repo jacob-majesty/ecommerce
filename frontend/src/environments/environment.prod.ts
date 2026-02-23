@@ -1,6 +1,6 @@
 export const environment = {
   production: true,
-  shopApiUrl: 'https://api.yourdomain.com/api',
+  shopApiUrl: 'https://majesty-ecommerce.avzkcaqgtxkhj.us-east-1.cs.amazonlightsail.com/',
   auth0: {
     domain: 'AUTH0_DOMAIN_PLACEHOLDER',
     clientId: 'AUTH0_CLIENT_ID_PLACEHOLDER',
@@ -24,6 +24,6 @@ export const environment = {
     }
   },
   stripe: {
-    publishableKey: 'STRIPE_PUBLISHABLE_KEY_PLACEHOLDER'
+    publishableKey: 'pk_test_51T3OoqCvwjVQxybvKBC78H0FikGYFlp915rONy4JH2GpNI27Wh0tOPf4iGtKhQ5G45EJHuGuHESF0ttyOdd6NiSI00Uetz9Szc'
   }
 };
