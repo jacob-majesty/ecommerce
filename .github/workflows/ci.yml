@@ -14,27 +14,56 @@ env:
   AWS_REGION: us-east-1
 
 jobs:
-  build-and-deploy:
+  build-test-deploy:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
 
-      # 1. Login to Docker Hub
+      # --- STEP 1: TEST & PACKAGE BACKEND ---
+      - name: Set up JDK 17
+        uses: actions/setup-java@v4
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+          cache: 'maven'
+
+      - name: Build and Test Backend
+        run: |
+          cd backend
+          mvn clean package # Runs unit tests and builds the JAR
+
+      # --- STEP 2: TEST & BUILD FRONTEND ---
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+          cache: 'npm'
+          cache-dependency-path: frontend/package-lock.json
+
+      - name: Build and Test Frontend
+        run: |
+          cd frontend
+          npm install
+          # Runs Angular tests in a headless browser
+          npm test -- --watch=false --browsers=ChromeHeadless
+          npm run build -- --configuration=production
+
+      # --- STEP 3: DOCKER HUB LOGIN ---
       - name: Login to Docker Hub
         uses: docker/login-action@v3
         with:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
 
-      # 2. Build & Push Images
-      - name: Build and Push Backend
+      # --- STEP 4: BUILD & PUSH IMAGES ---
+      - name: Push Backend to Docker Hub
         uses: docker/build-push-action@v5
         with:
           context: ./backend
           push: true
           tags: ${{ env.DOCKER_REGISTRY }}/${{ env.BACKEND_IMAGE }}:latest
 
-      - name: Build and Push Frontend
+      - name: Push Frontend to Docker Hub
         uses: docker/build-push-action@v5
         with:
           context: ./frontend
@@ -43,10 +72,8 @@ jobs:
           build-args: |
             AUTH0_DOMAIN=${{ secrets.AUTH0_DOMAIN }}
             AUTH0_CLIENT_ID=${{ secrets.AUTH0_CLIENT_ID }}
-            AUTH0_AUDIENCE=${{ secrets.AUTH0_AUDIENCE }}
-            AUTH0_REDIRECT_URI=${{ secrets.AUTH0_REDIRECT_URI }}
 
-      # 3. Deploy to AWS Lightsail (Triggered on push to main or dev)
+      # --- STEP 5: DEPLOY TO AWS LIGHTSAIL ---
       - name: Deploy to AWS Lightsail
         if: github.event_name == 'push'
         run: |
