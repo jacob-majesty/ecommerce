@@ -10,13 +10,13 @@ ARG AUTH0_AUDIENCE
 
 COPY package*.json ./
 RUN npm install
-RUN npm install --save-dev @types/node
 
 COPY . .
 
 EXPOSE 80
 
-CMD sed -i "s|AUTH0_DOMAIN_PLACEHOLDER|$AUTH0_DOMAIN|g" src/environments/environment.ts && \
+CMD ([ -x node_modules/.bin/ng ] || npm install) && \
+    sed -i "s|AUTH0_DOMAIN_PLACEHOLDER|$AUTH0_DOMAIN|g" src/environments/environment.ts && \
     sed -i "s|AUTH0_CLIENT_ID_PLACEHOLDER|$AUTH0_CLIENT_ID|g" src/environments/environment.ts && \
     sed -i "s|AUTH0_REDIRECT_URI_PLACEHOLDER|$AUTH0_REDIRECT_URI|g" src/environments/environment.ts && \
     sed -i "s|AUTH0_AUDIENCE_PLACEHOLDER|$AUTH0_AUDIENCE|g" src/environments/environment.ts && \

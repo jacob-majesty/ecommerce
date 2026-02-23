@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, OnInit, AfterViewInit} from '@angular/core';
 import {FormBuilder, FormControl, FormGroup, ReactiveFormsModule, Validators} from "@angular/forms";
 import {CartService} from "../../services/cart.service";
 import {CurrencyPipe, CommonModule} from "@angular/common";
@@ -26,7 +26,7 @@ import {PaymentInfo} from "../../common/payment-info";
   templateUrl: './checkout.component.html',
   styleUrl: './checkout.component.css'
 })
-export class CheckoutComponent implements OnInit {
+export class CheckoutComponent implements OnInit, AfterViewInit {
 
   checkoutFormGroup!: FormGroup;
 
@@ -79,9 +79,7 @@ export class CheckoutComponent implements OnInit {
   ngOnInit(): void {
     this.reviewCartDetails();
 
-    this.setupStripePaymentForm();
-
-    const theEmail = JSON.parse(this.storage.getItem('userEmail')!);
+    const theEmail = this.getStoredEmail();
 
     this.checkoutFormGroup = this.formBuilder.group({
       customer: this.formBuilder.group({
@@ -118,6 +116,10 @@ export class CheckoutComponent implements OnInit {
     this.shopFormService.getCountries().subscribe(
       data => this.countries = data
     );
+  }
+
+  ngAfterViewInit(): void {
+    setTimeout(() => this.setupStripePaymentForm());
   }
 
   reviewCartDetails() {
@@ -359,5 +361,21 @@ export class CheckoutComponent implements OnInit {
         cardElement.innerHTML = '<div class="alert alert-danger">Failed to load payment system. Please try refreshing the page.</div>';
       }
     });
+  }
+
+  private getStoredEmail(): string {
+    const storedEmail = this.storage.getItem('userEmail');
+    if (!storedEmail) {
+      return '';
+    }
+
+    try {
+      const parsed = JSON.parse(storedEmail);
+      return typeof parsed === 'string' ? parsed : '';
+    } catch (error) {
+      console.warn('Invalid user email stored; clearing value.', error);
+      this.storage.removeItem('userEmail');
+      return '';
+    }
   }
 }
