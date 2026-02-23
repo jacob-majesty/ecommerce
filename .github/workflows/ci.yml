@@ -6,36 +6,87 @@ on:
   pull_request:
     branches: [ "dev" ]
 
+env:
+  DOCKER_REGISTRY: jacobmajesty1
+  BACKEND_IMAGE: ecommerce-backend
+  FRONTEND_IMAGE: ecommerce-frontend
+  LIGHTSAIL_SERVICE: majesty-ecommerce
+  AWS_REGION: us-east-1
+
 jobs:
-  build-and-test:
+  build-and-deploy:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
 
-      # --- Backend ---
-      - name: Set up JDK 17
-        uses: actions/setup-java@v4
+      # 1. Login to Docker Hub
+      - name: Login to Docker Hub
+        uses: docker/login-action@v3
         with:
-          java-version: '17'
-          distribution: 'temurin'
-          cache: 'maven'
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
 
-      - name: Build and Test Backend
-        run: |
-          cd backend
-          mvn clean package -DskipTests
-
-      # --- Frontend ---
-      - name: Set up Node.js
-        uses: actions/setup-node@v4
+      # 2. Build & Push Images
+      - name: Build and Push Backend
+        uses: docker/build-push-action@v5
         with:
-          node-version: '18'
-          cache: 'npm'
-          cache-dependency-path: frontend/package-lock.json
+          context: ./backend
+          push: true
+          tags: ${{ env.DOCKER_REGISTRY }}/${{ env.BACKEND_IMAGE }}:latest
 
-      - name: Build and Test Frontend
+      - name: Build and Push Frontend
+        uses: docker/build-push-action@v5
+        with:
+          context: ./frontend
+          push: true
+          tags: ${{ env.DOCKER_REGISTRY }}/${{ env.FRONTEND_IMAGE }}:latest
+          build-args: |
+            AUTH0_DOMAIN=${{ secrets.AUTH0_DOMAIN }}
+            AUTH0_CLIENT_ID=${{ secrets.AUTH0_CLIENT_ID }}
+
+      # 3. Deploy to AWS Lightsail (Triggered on push to main or dev)
+      - name: Deploy to AWS Lightsail
+        if: github.event_name == 'push'
         run: |
-          cd frontend
-          npm install
-          # Note: For test, add 'npm test -- --watch=false --browsers=ChromeHeadless'
-          npm run build -- --configuration=production
+          aws configure set aws_access_key_id ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws configure set aws_secret_access_key ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws configure set region ${{ env.AWS_REGION }}
+          
+          aws lightsail create-container-service-deployment \
+            --service-name ${{ env.LIGHTSAIL_SERVICE }} \
+            --containers '{
+              "ecommerce-db": {
+                "image": "mysql:8.0",
+                "environment": {
+                  "MYSQL_ROOT_PASSWORD": "${{ secrets.MYSQL_ROOT_PASSWORD }}",
+                  "MYSQL_DATABASE": "full-stack-ecommerce"
+                },
+                "ports": { "3306": "TCP" }
+              },
+              "ecommerce-backend": {
+                "image": "${{ env.DOCKER_REGISTRY }}/${{ env.BACKEND_IMAGE }}:latest",
+                "environment": {
+                  "SPRING_DATASOURCE_URL": "jdbc:mysql://127.0.0.1:3306/full-stack-ecommerce?allowPublicKeyRetrieval=true&useSSL=false",
+                  "SPRING_DATASOURCE_USERNAME": "root",
+                  "SPRING_DATASOURCE_PASSWORD": "${{ secrets.MYSQL_ROOT_PASSWORD }}",
+                  "SPRING_DATASOURCE_HIKARI_CONNECTION_TIMEOUT": "30000",
+                  "SPRING_DATASOURCE_HIKARI_MAXIMUM_POOL_SIZE": "5"
+                },
+                "ports": { "8080": "HTTP" }
+              },
+              "ecommerce-frontend": {
+                "image": "${{ env.DOCKER_REGISTRY }}/${{ env.FRONTEND_IMAGE }}:latest",
+                "ports": { "80": "HTTP" }
+              }
+            }' \
+            --public-endpoint '{
+              "containerName": "ecommerce-frontend",
+              "containerPort": 80,
+              "healthCheck": {
+                "path": "/",
+                "timeoutSeconds": 60,
+                "intervalSeconds": 30,
+                "healthyThreshold": 2,
+                "unhealthyThreshold": 6
+              }
+            }'
