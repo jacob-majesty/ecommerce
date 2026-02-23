@@ -9,7 +9,6 @@ ARG AUTH0_AUDIENCE
 
 COPY package*.json ./
 RUN npm install
-RUN npm install --save-dev @types/node
 COPY . .
 
 RUN sed -i "s|AUTH0_DOMAIN_PLACEHOLDER|$AUTH0_DOMAIN|g" src/environments/environment.prod.ts && \
