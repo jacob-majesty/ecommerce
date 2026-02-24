@@ -572,6 +572,29 @@ input.au-input.au-input-xl{
   padding:50px 20px;
   border:3px solid #ccc
 }
+
+#card-element {
+  background: #fff;
+  padding: 12px 14px;
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+  box-sizing: border-box; 
+  transition: border 0.15s ease;
+}
+
+
+#card-element--focus {
+  border-color: #80bdff;
+  outline: 0;
+  box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+}
+
+#card-errors {
+  color: #dc3545;
+  margin-top: 8px;
+  font-size: 14px;
+}
+
 .form-area h3{
   position:absolute;
   top:-26px;
