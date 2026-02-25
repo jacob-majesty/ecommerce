@@ -1,4 +1,44 @@
 services:
+  db:
+    image: mysql:8.0
+    restart: always
+    environment:
+      MYSQL_DATABASE: ${MYSQL_DATABASE}
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+    ports:
+      - "3307:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+    healthcheck:
+      test: [ "CMD", "mysqladmin" ,"ping", "-h", "localhost", "-u", "root", "-p${MYSQL_ROOT_PASSWORD}" ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - ecommerce-network
+
+  backend:
+    container_name: ecommerce-backend
+    build:
+      context: ./backend
+      network: host
+    ports:
+      - "8080:8080"
+    environment:
+      - MYSQL_DATABASE=${MYSQL_DATABASE}
+      - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}
+      - MYSQL_USER=${MYSQL_USER}
+      - MYSQL_PASSWORD=${MYSQL_PASSWORD}
+      - AUTH0_DOMAIN=${AUTH0_DOMAIN}
+      - AUTH0_CLIENT_ID=${AUTH0_CLIENT_ID}
+      - AUTH0_AUDIENCE=${AUTH0_AUDIENCE}
+      - STRIPE_SECRET_KEY=${STRIPE_SECRET_KEY}
+    depends_on:
+      db:
+        condition: service_healthy
+    networks:
+      - ecommerce-network
+
   frontend:
     build:
       context: ./frontend
@@ -15,3 +55,14 @@ services:
       - /app/node_modules
     env_file:
       - .env
+    depends_on:
+      - backend
+    networks:
+      - ecommerce-network
+
+volumes:
+  mysql_data:
+
+networks:
+  ecommerce-network:
+    driver: bridge

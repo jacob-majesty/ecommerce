@@ -2,6 +2,7 @@
   <div class="section-content section-content-p30">
     <div class="container-fluid">
 
+      @if (checkoutFormGroup) {
       <form [formGroup]="checkoutFormGroup" (ngSubmit)="onSubmit()">
 
         <!-- customer form group -->
@@ -347,6 +348,13 @@
         </div>
 
       </form>
+      } @else {
+        <div class="text-center py-5">
+          <div class="spinner-border text-info" role="status">
+            <span class="visually-hidden">Loading checkout…</span>
+          </div>
+        </div>
+      }
 
     </div>
   </div>

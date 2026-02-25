@@ -1,6 +1,6 @@
 export const environment = {
   production: true,
-  shopApiUrl: 'https://majesty-ecommerce.avzkcaqgtxkhj.us-east-1.cs.amazonlightsail.com/',
+  shopApiUrl: '/api',
   auth0: {
     domain: 'AUTH0_DOMAIN_PLACEHOLDER',
     clientId: 'AUTH0_CLIENT_ID_PLACEHOLDER',
@@ -11,7 +11,7 @@ export const environment = {
     httpInterceptor: {
       allowedList: [
         {
-          uri: 'http://localhost:80/*',
+          uri: '/api/*',
           httpMethod: 'GET',
           tokenOptions: {
             authorizationParams: {
