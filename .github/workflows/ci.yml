@@ -47,72 +47,72 @@ jobs:
           npm run build -- --configuration=production
 
       # --- STEP 3: DOCKER OPERATIONS ---
-      - name: Login to Docker Hub
-        uses: docker/login-action@v3
-        with:
-          username: ${{ secrets.DOCKERHUB_USERNAME }}
-          password: ${{ secrets.DOCKERHUB_TOKEN }}
+#      - name: Login to Docker Hub
+#        uses: docker/login-action@v3
+#        with:
+#          username: ${{ secrets.DOCKERHUB_USERNAME }}
+#          password: ${{ secrets.DOCKERHUB_TOKEN }}
 
-      - name: Build and Push Backend Image
-        uses: docker/build-push-action@v5
-        with:
-          context: ./backend
-          push: true
-          tags: ${{ env.DOCKER_REGISTRY }}/${{ env.BACKEND_IMAGE }}:latest
+#      - name: Build and Push Backend Image
+#        uses: docker/build-push-action@v5
+#        with:
+#          context: ./backend
+#          push: true
+#          tags: ${{ env.DOCKER_REGISTRY }}/${{ env.BACKEND_IMAGE }}:latest
 
-      - name: Build and Push Frontend Image
-        uses: docker/build-push-action@v5
-        with:
-          context: ./frontend
-          push: true
-          tags: ${{ env.DOCKER_REGISTRY }}/${{ env.FRONTEND_IMAGE }}:latest
-          build-args: |
-            AUTH0_DOMAIN=${{ secrets.AUTH0_DOMAIN }}
-            AUTH0_CLIENT_ID=${{ secrets.AUTH0_CLIENT_ID }}
+#      - name: Build and Push Frontend Image
+#        uses: docker/build-push-action@v5
+#        with:
+#          context: ./frontend
+#          push: true
+#          tags: ${{ env.DOCKER_REGISTRY }}/${{ env.FRONTEND_IMAGE }}:latest
+#          build-args: |
+#            AUTH0_DOMAIN=${{ secrets.AUTH0_DOMAIN }}
+#            AUTH0_CLIENT_ID=${{ secrets.AUTH0_CLIENT_ID }}
 
-      # --- STEP 4: AWS LIGHTSAIL DEPLOYMENT ---
-      - name: Deploy to AWS Lightsail
-        if: github.event_name == 'push'
-        run: |
-          aws configure set aws_access_key_id ${{ secrets.AWS_ACCESS_KEY_ID }}
-          aws configure set aws_secret_access_key ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          aws configure set region ${{ env.AWS_REGION }}
-          
-          aws lightsail create-container-service-deployment \
-            --service-name ${{ env.LIGHTSAIL_SERVICE }} \
-            --containers '{
-              "ecommerce-db": {
-                "image": "mysql:8.0",
-                "environment": {
-                  "MYSQL_ROOT_PASSWORD": "${{ secrets.MYSQL_ROOT_PASSWORD }}",
-                  "MYSQL_DATABASE": "full-stack-ecommerce"
-                },
-                "ports": { "3306": "TCP" }
-              },
-              "ecommerce-backend": {
-                "image": "${{ env.DOCKER_REGISTRY }}/${{ env.BACKEND_IMAGE }}:latest",
-                "environment": {
-                  "SPRING_DATASOURCE_URL": "jdbc:mysql://127.0.0.1:3306/full-stack-ecommerce?allowPublicKeyRetrieval=true&useSSL=false",
-                  "SPRING_DATASOURCE_USERNAME": "root",
-                  "SPRING_DATASOURCE_PASSWORD": "${{ secrets.MYSQL_ROOT_PASSWORD }}",
-                  "SPRING_DATASOURCE_HIKARI_CONNECTION_TIMEOUT": "30000",
-                  "SPRING_DATASOURCE_HIKARI_MAXIMUM_POOL_SIZE": "5"
-                },
-                "ports": { "8080": "HTTP" }
-              },
-              "ecommerce-frontend": {
-                "image": "${{ env.DOCKER_REGISTRY }}/${{ env.FRONTEND_IMAGE }}:latest",
-                "ports": { "80": "HTTP" }
-              }
-            }' \
-            --public-endpoint '{
-              "containerName": "ecommerce-frontend",
-              "containerPort": 80,
-              "healthCheck": {
-                "path": "/",
-                "timeoutSeconds": 60,
-                "intervalSeconds": 30,
-                "healthyThreshold": 2,
-                "unhealthyThreshold": 6
-              }
-            }'
+# --- STEP 4: AWS LIGHTSAIL DEPLOYMENT ---
+#      - name: Deploy to AWS Lightsail
+#        if: github.event_name == 'push'
+#        run: |
+#          aws configure set aws_access_key_id ${{ secrets.AWS_ACCESS_KEY_ID }}
+#          aws configure set aws_secret_access_key ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+#          aws configure set region ${{ env.AWS_REGION }}
+#          
+#          aws lightsail create-container-service-deployment \
+#            --service-name ${{ env.LIGHTSAIL_SERVICE }} \
+#            --containers '{
+#              "ecommerce-db": {
+#                "image": "mysql:8.0",
+#                "environment": {
+#                  "MYSQL_ROOT_PASSWORD": "${{ secrets.MYSQL_ROOT_PASSWORD }}",
+#                  "MYSQL_DATABASE": "full-stack-ecommerce"
+#                },
+#                "ports": { "3306": "TCP" }
+#              },
+#              "ecommerce-backend": {
+#                "image": "${{ env.DOCKER_REGISTRY }}/${{ env.BACKEND_IMAGE }}:latest",
+#                "environment": {
+#                  "SPRING_DATASOURCE_URL": "jdbc:mysql://127.0.0.1:3306/full-stack-ecommerce?allowPublicKeyRetrieval=true&useSSL=false",
+#                  "SPRING_DATASOURCE_USERNAME": "root",
+#                  "SPRING_DATASOURCE_PASSWORD": "${{ secrets.MYSQL_ROOT_PASSWORD }}",
+#                  "SPRING_DATASOURCE_HIKARI_CONNECTION_TIMEOUT": "30000",
+#                  "SPRING_DATASOURCE_HIKARI_MAXIMUM_POOL_SIZE": "5"
+#                },
+#                "ports": { "8080": "HTTP" }
+#              },
+#              "ecommerce-frontend": {
+#                "image": "${{ env.DOCKER_REGISTRY }}/${{ env.FRONTEND_IMAGE }}:latest",
+#                "ports": { "80": "HTTP" }
+#              }
+#            }' \
+#            --public-endpoint '{
+#              "containerName": "ecommerce-frontend",
+#              "containerPort": 80,
+#              "healthCheck": {
+#                "path": "/",
+#                "timeoutSeconds": 60,
+#                "intervalSeconds": 30,
+#                "healthyThreshold": 2,
+#                "unhealthyThreshold": 6
+#              }
+#            }'
